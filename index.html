@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GlowPatch — Patchs anti-boutons ✨</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Syne:wght@700;800&display=swap');
+
+  :root {
+    --night: #0f0f1a;
+    --deep: #1a1a2e;
+    --purple: #6c63ff;
+    --pink: #e8b4d0;
+    --pink-light: #fdf0f7;
+    --gold: #ffd700;
+    --red: #e24b4a;
+    --green: #2ecc71;
+    --white: #ffffff;
+    --gray: #f5f5f7;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--deep);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--pink);
+    letter-spacing: -0.5px;
+  }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { color: #aaa; text-decoration: none; font-size: 13px; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--pink);
+    color: var(--deep);
+    border: none;
+    border-radius: 24px;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* HERO */
+  .hero {
+    background: var(--deep);
+    color: var(--white);
+    padding: 60px 24px 50px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(108,99,255,0.25) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    background: rgba(232,180,208,0.15);
+    border: 1px solid rgba(232,180,208,0.3);
+    color: var(--pink);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero h1 span { color: var(--pink); }
+  .hero-sub {
+    color: #9ca3af;
+    font-size: 16px;
+    max-width: 500px;
+    margin: 0 auto 28px;
+  }
+  .hero-price-block {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 14px 28px;
+    margin-bottom: 28px;
+  }
+  .price-big {
+    font-family: 'Syne', sans-serif;
+    font-size: 38px;
+    font-weight: 800;
+    color: var(--pink);
+  }
+  .price-old {
+    font-size: 18px;
+    text-decoration: line-through;
+    color: #6b7280;
+  }
+  .price-badge {
+    background: var(--red);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .hero-stars {
+    color: var(--gold);
+    font-size: 18px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .hero-stats {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 32px;
+  }
+  .hero-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--pink);
+    color: var(--deep);
+    border: none;
+    border-radius: 12px;
+    padding: 14px 32px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.15s, opacity 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { transform: translateY(-1px); opacity: 0.9; }
+  .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 14px 32px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.08); }
+
+  /* TRUST BAR */
+  .trust-bar {
+    background: var(--gray);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .trust-item .icon { font-size: 18px; }
+
+  /* SECTIONS */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+  .section { padding: 60px 0; }
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--purple);
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 40px;
+    line-height: 1.2;
+  }
+
+  /* PRODUCT SHOWCASE */
+  .product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 600px) { .product-grid { grid-template-columns: 1fr; } }
+
+  .product-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+
+  .product-img {
+    background: linear-gradient(135deg, #fdf0f7 0%, #ede9fe 100%);
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    position: relative;
+  }
+  .badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .badge-new { background: var(--purple); }
+
+  .product-body { padding: 16px; }
+  .product-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .product-desc { font-size: 12px; color: var(--muted); margin-bottom: 12px; line-height: 1.5; }
+  .product-price { display: flex; align-items: baseline; gap: 8px; }
+  .product-price .now { font-size: 20px; font-weight: 700; color: var(--red); }
+  .product-price .was { font-size: 13px; text-decoration: line-through; color: var(--muted); }
+
+  /* FEATURES */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .feature {
+    background: var(--gray);
+    border-radius: 14px;
+    padding: 20px;
+  }
+  .feature-icon { font-size: 28px; margin-bottom: 10px; }
+  .feature h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .feature p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* REVIEWS */
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .review-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+  }
+  .review-stars { color: var(--gold); font-size: 14px; margin-bottom: 8px; }
+  .review-text { font-size: 13px; color: var(--text); line-height: 1.6; margin-bottom: 12px; }
+  .reviewer { display: flex; align-items: center; gap: 10px; }
+  .reviewer-avatar {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--deep);
+    color: var(--pink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600;
+  }
+  .reviewer-name { font-size: 13px; font-weight: 600; }
+  .reviewer-location { font-size: 11px; color: var(--muted); }
+
+  /* ORDER FORM */
+  #commander {
+    background: var(--deep);
+    padding: 60px 0;
+    color: var(--white);
+  }
+  #commander .section-title { color: var(--white); }
+  #commander .section-label { color: var(--pink); }
+
+  .order-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  @media (max-width: 700px) { .order-wrapper { grid-template-columns: 1fr; } }
+
+  .order-summary h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: var(--white);
+  }
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 14px;
+    color: #9ca3af;
+  }
+  .summary-item strong { color: var(--white); }
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--white);
+  }
+  .summary-total .amount {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--pink);
+  }
+  .cod-note {
+    margin-top: 16px;
+    background: rgba(232,180,208,0.1);
+    border: 1px solid rgba(232,180,208,0.2);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--pink);
+  }
+
+  /* FORM */
+  form {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 24px;
+  }
+  .form-group { margin-bottom: 16px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: #9ca3af;
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+  input, select, textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  input::placeholder, textarea::placeholder { color: #4b5563; }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--pink);
+  }
+  select option { background: var(--deep); color: var(--white); }
+  textarea { min-height: 70px; resize: vertical; }
+
+  .qty-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .qty-btn {
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    color: var(--white);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .qty-val {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--white);
+    min-width: 24px;
+    text-align: center;
+  }
+
+  /* Hidden Formspree fields */
+  .hidden { display: none; }
+
+  .btn-submit {
+    width: 100%;
+    background: var(--pink);
+    color: var(--deep);
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    font-family: 'Inter', sans-serif;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+  .btn-submit:hover { transform: translateY(-1px); opacity: 0.9; }
+  .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .form-note {
+    text-align: center;
+    font-size: 12px;
+    color: #4b5563;
+    margin-top: 10px;
+  }
+
+  /* SUCCESS */
+  .success-box {
+    display: none;
+    background: rgba(46,204,113,0.1);
+    border: 1px solid rgba(46,204,113,0.3);
+    border-radius: 14px;
+    padding: 24px;
+    text-align: center;
+    color: #2ecc71;
+  }
+  .success-box .icon { font-size: 40px; margin-bottom: 12px; }
+  .success-box h3 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+  .success-box p { font-size: 13px; opacity: 0.8; }
+
+  /* FAQ */
+  .faq-list { display: flex; flex-direction: column; gap: 1px; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+  }
+  .faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 18px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+  }
+  .faq-arrow { font-size: 18px; color: var(--muted); transition: transform 0.2s; }
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    transition: max-height 0.3s ease, padding 0.3s;
+  }
+  .faq-item.open .faq-a { max-height: 200px; padding-bottom: 16px; }
+  .faq-item.open .faq-arrow { transform: rotate(45deg); }
+
+  /* FOOTER */
+  footer {
+    background: var(--night);
+    color: #6b7280;
+    padding: 40px 24px;
+    text-align: center;
+  }
+  footer .logo { font-size: 24px; color: var(--pink); margin-bottom: 12px; display: block; }
+  footer p { font-size: 13px; line-height: 2; }
+  footer a { color: var(--pink); text-decoration: none; }
+  .pay-methods { display: flex; gap: 8px; justify-content: center; margin: 16px 0; flex-wrap: wrap; }
+  .pay-chip {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: #9ca3af;
+  }
+  .divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 24px 0; }
+
+  /* SCROLL ANIM */
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.5s, transform 0.5s; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* MOBILE NAV */
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">✨ GlowPatch</div>
+  <div class="nav-links">
+    <a href="#produits">Produits</a>
+    <a href="#avis">Avis</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <a href="#commander" class="nav-cta">Commander →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">🇲🇦 Livraison partout au Maroc</div>
+  <h1>Les patchs anti-boutons<br><span>en forme d'étoile</span></h1>
+  <p class="hero-sub">Technologie hydrocolloïde · Hypoallergénique · Résistant à l'eau · 7 couleurs fun</p>
+  <div class="hero-price-block">
+    <span class="price-big">70 MAD</span>
+    <span class="price-old">151 MAD</span>
+    <span class="price-badge">-53%</span>
+  </div>
+  <div class="hero-stars">★★★★★</div>
+  <p class="hero-stats">4.8/5 · 8 avis vérifiés · 95+ commandes</p>
+  <div class="hero-buttons">
+    <a href="#commander" class="btn-primary">🛒 Commander maintenant</a>
+    <a href="#produits" class="btn-secondary">Voir le produit</a>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><span class="icon">🚚</span> Livraison gratuite dès 150 MAD</div>
+  <div class="trust-item"><span class="icon">💵</span> Paiement à la livraison</div>
+  <div class="trust-item"><span class="icon">↩️</span> Retour sous 7 jours</div>
+  <div class="trust-item"><span class="icon">🔒</span> Commande sécurisée</div>
+</div>
+
+<!-- PRODUITS -->
+<section class="section" id="produits">
+  <div class="container fade-in">
+    <div class="section-label">Nos produits</div>
+    <div class="section-title">Choisissez votre pack</div>
+    <div class="product-grid">
+      <div class="product-card">
+        <div class="product-img">⭐🌟<div class="badge">Best-seller</div></div>
+        <div class="product-body">
+          <div class="product-name">Pack Starter — 320 pcs</div>
+          <div class="product-desc">7 couleurs en forme d'étoile. Parfait pour essayer et débuter. Convient 1 à 2 mois d'utilisation.</div>
+          <div class="product-price">
+            <span class="now">70 MAD</span>
+            <span class="was">151 MAD</span>
+          </div>
+        </div>
+      </div>
+      <div class="product-card">
+        <div class="product-img">💫✨<div class="badge badge-new">Meilleure valeur</div></div>
+        <div class="product-body">
+          <div class="product-name">Pack Pro — 1920 pcs</div>
+          <div class="product-desc">6x plus de patchs, même prix par unité. Idéal pour toute la famille ou revendre.</div>
+          <div class="product-price">
+            <span class="now">149 MAD</span>
+            <span class="was">320 MAD</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" style="background: var(--gray); padding: 50px 0;">
+  <div class="container fade-in">
+    <div class="section-label">Pourquoi GlowPatch</div>
+    <div class="section-title">Efficace. Discret. Fun.</div>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon">💧</div>
+        <h3>Hydrocolloïde</h3>
+        <p>Absorbe le pus et réduit l'inflammation du bouton en quelques heures.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🌈</div>
+        <h3>7 couleurs fun</h3>
+        <p>Assumez votre skin ! Les étoiles colorées transforment le patch en accessoire.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">💦</div>
+        <h3>Résistant à l'eau</h3>
+        <p>Tient toute la journée même sous l'eau. Utilisable jour et nuit.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🌸</div>
+        <h3>Hypoallergénique</h3>
+        <p>Sans parfum ni colorant agressif. Testé pour peaux sensibles.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AVIS -->
+<section class="section" id="avis">
+  <div class="container fade-in">
+    <div class="section-label">Ce qu'ils en pensent</div>
+    <div class="section-title">Avis de nos clients 🇲🇦</div>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Incroyable ! Les patchs ont réduit mes boutons du jour au lendemain. Le design étoile est trop mignon."</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">SA</div>
+          <div>
+            <div class="reviewer-name">Salma A.</div>
+            <div class="reviewer-location">Casablanca</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">"Livraison rapide, produit conforme. Je les utilise depuis 2 semaines, très efficaces. Je recommande !"</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">YB</div>
+          <div>
+            <div class="reviewer-name">Youssef B.</div>
+            <div class="reviewer-location">Rabat</div>
+          </div>
+        </div>
+      </div>
+      <div class="review-card">
+        <div class="review-stars">★★★★☆</div>
+        <p class="review-text">"Super produit. Le pack 320 pcs dure longtemps. Juste le délai un peu long mais ça vaut largement le coup."</p>
+        <div class="reviewer">
+          <div class="reviewer-avatar">NE</div>
+          <div>
+            <div class="reviewer-name">Nadia E.</div>
+            <div class="reviewer-location">Marrakech</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORDER FORM -->
+<section id="commander">
+  <div class="container">
+    <div class="section-label">Commandez maintenant</div>
+    <div class="section-title">Livraison partout au Maroc 🇲🇦</div>
+    <div class="order-wrapper">
+
+      <!-- Summary -->
+      <div class="order-summary">
+        <h3>Récapitulatif</h3>
+        <div class="summary-item">
+          <span>Produit</span>
+          <strong id="sum-product">Pack Starter 320 pcs</strong>
+        </div>
+        <div class="summary-item">
+          <span>Quantité</span>
+          <strong id="sum-qty">1</strong>
+        </div>
+        <div class="summary-item">
+          <span>Prix unitaire</span>
+          <strong id="sum-unit">70 MAD</strong>
+        </div>
+        <div class="summary-item">
+          <span>Livraison</span>
+          <strong>Gratuite ✅</strong>
+        </div>
+        <div class="summary-total">
+          <span>Total</span>
+          <span class="amount" id="sum-total">70 MAD</span>
+        </div>
+        <div class="cod-note">
+          💵 Paiement à la livraison<br>
+          Vous payez quand vous recevez votre colis. Aucun risque.
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div>
+        <!-- ⚠️ REMPLACEZ l'action ci-dessous par votre lien Formspree -->
+        <form id="order-form" action="https://formspree.io/f/VOTRE_ID_ICI" method="POST">
+
+          <!-- Champs cachés pour le résumé de commande -->
+          <input type="hidden" name="produit" id="field-product">
+          <input type="hidden" name="quantite" id="field-qty">
+          <input type="hidden" name="total" id="field-total">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Prénom *</label>
+              <input type="text" name="prenom" placeholder="Votre prénom" required>
+            </div>
+            <div class="form-group">
+              <label>Nom *</label>
+              <input type="text" name="nom" placeholder="Votre nom" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Téléphone (WhatsApp) *</label>
+            <input type="tel" name="telephone" placeholder="06 00 00 00 00" required>
+          </div>
+
+          <div class="form-group">
+            <label>Adresse de livraison complète *</label>
+            <input type="text" name="adresse" placeholder="Rue, quartier, ville" required>
+          </div>
+
+          <div class="form-group">
+            <label>Format</label>
+            <select name="format" id="format-select" onchange="updateOrder()">
+              <option value="70" data-name="Pack Starter 320 pcs">Pack Starter 320 pcs — 70 MAD</option>
+              <option value="149" data-name="Pack Pro 1920 pcs">Pack Pro 1920 pcs — 149 MAD</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Quantité</label>
+            <div class="qty-row">
+              <button type="button" class="qty-btn" onclick="changeQty(-1)">−</button>
+              <span class="qty-val" id="qty-display">1</span>
+              <button type="button" class="qty-btn" onclick="changeQty(+1)">+</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Message (optionnel)</label>
+            <textarea name="message" placeholder="Instructions spéciales pour la livraison..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit" id="submit-btn">
+            ✅ Confirmer ma commande
+          </button>
+          <p class="form-note">📦 Vous serez contacté sous 24h par WhatsApp</p>
+        </form>
+
+        <div class="success-box" id="success-box">
+          <div class="icon">🎉</div>
+          <h3>Commande reçue !</h3>
+          <p>Merci pour votre commande. Nous vous contacterons sous 24h sur WhatsApp pour confirmer la livraison.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="container fade-in">
+    <div class="section-label">FAQ</div>
+    <div class="section-title">Questions fréquentes</div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Combien de temps pour la livraison ?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Livraison sous 3 à 7 jours ouvrables partout au Maroc. Casablanca, Rabat, Marrakech, Fès, Tanger et toutes les autres villes.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Comment se passe le paiement ?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Paiement à la livraison (Cash on Delivery). Vous payez en liquide quand le livreur vous remet votre colis. Aucun risque, aucune carte bancaire nécessaire.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Puis-je retourner le produit ?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Oui, dans les 7 jours si le produit est non utilisé et dans son emballage d'origine. Contactez-nous sur WhatsApp et nous arrangerons le retour.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Les patchs conviennent à toutes les peaux ?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Oui ! Les patchs GlowPatch sont hypoallergéniques, sans parfum et sans colorant agressif. Ils sont testés pour les peaux sensibles et conviennent à tous les types de peau.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Comment utiliser les patchs ?
+          <span class="faq-arrow">+</span>
+        </button>
+        <div class="faq-a">Nettoyez et séchez votre peau. Décollez le patch et appliquez-le directement sur le bouton. Laissez agir 6 à 8 heures (ou toute une nuit). Retirez doucement le matin. C'est tout !</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="logo">✨ GlowPatch</span>
+  <p>
+    Votre boutique beauté de confiance au Maroc<br>
+    📱 WhatsApp : <a href="https://wa.me/212600000000">+212 6XX XXX XXX</a><br>
+    📧 <a href="mailto:contact@glowpatch.ma">contact@glowpatch.ma</a>
+  </p>
+  <div class="pay-methods">
+    <span class="pay-chip">💵 Cash à la livraison</span>
+    <span class="pay-chip">📦 COD</span>
+    <span class="pay-chip">🏦 Virement</span>
+  </div>
+  <hr class="divider">
+  <p style="font-size: 12px;">© 2026 GlowPatch — Tous droits réservés · Maroc</p>
+</footer>
+
+<script>
+  /* ---- COMMANDE ---- */
+  let qty = 1;
+
+  function getUnitPrice() {
+    return parseInt(document.getElementById('format-select').value);
+  }
+
+  function getProductName() {
+    const sel = document.getElementById('format-select');
+    return sel.options[sel.selectedIndex].dataset.name;
+  }
+
+  function updateOrder() {
+    const total = qty * getUnitPrice();
+    document.getElementById('qty-display').textContent = qty;
+    document.getElementById('sum-qty').textContent = qty;
+    document.getElementById('sum-product').textContent = getProductName();
+    document.getElementById('sum-unit').textContent = getUnitPrice() + ' MAD';
+    document.getElementById('sum-total').textContent = total + ' MAD';
+    document.getElementById('field-product').value = getProductName();
+    document.getElementById('field-qty').value = qty;
+    document.getElementById('field-total').value = total + ' MAD';
+  }
+
+  function changeQty(d) {
+    qty = Math.max(1, qty + d);
+    updateOrder();
+  }
+
+  updateOrder();
+
+  /* ---- FORMSPREE SUBMIT ---- */
+  document.getElementById('order-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Envoi en cours...';
+
+    const data = new FormData(this);
+
+    try {
+      const res = await fetch(this.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        this.style.display = 'none';
+        document.getElementById('success-box').style.display = 'block';
+      } else {
+        btn.disabled = false;
+        btn.textContent = '✅ Confirmer ma commande';
+        alert('Erreur lors de l\'envoi. Veuillez réessayer ou contactez-nous sur WhatsApp.');
+      }
+    } catch(err) {
+      btn.disabled = false;
+      btn.textContent = '✅ Confirmer ma commande';
+      alert('Erreur réseau. Veuillez réessayer.');
+    }
+  });
+
+  /* ---- FAQ ---- */
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    item.classList.toggle('open');
+  }
+
+  /* ---- SCROLL ANIMATIONS ---- */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
